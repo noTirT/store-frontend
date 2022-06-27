@@ -2,7 +2,8 @@ import { Offcanvas, Stack } from "react-bootstrap";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import { formatCurrency } from "../utilities/formatCurrency";
 import { CartItem } from "./CartItem";
-import storeItems from "../data/items.json";
+import { apiService, ArtItem } from "../utilities/apiService";
+import { useEffect, useState } from "react";
 
 type ShoppingCartProps = {
     isOpen: boolean;
@@ -10,6 +11,15 @@ type ShoppingCartProps = {
 
 export function ShoppingCart({ isOpen }: ShoppingCartProps) {
     const { closeCart, cartItems } = useShoppingCart();
+    const [storeItems, setStoreItems] = useState<ArtItem[]>([]);
+
+    useEffect(() => {
+        async function getItems() {
+            const response = await apiService.getAllItems();
+            setStoreItems(response);
+        }
+        getItems();
+    }, []);
     return (
         <Offcanvas show={isOpen} placement="end" onHide={closeCart}>
             <Offcanvas.Header closeButton>
@@ -29,7 +39,7 @@ export function ShoppingCart({ isOpen }: ShoppingCartProps) {
                                 );
                                 return (
                                     total +
-                                    (item?.price || 0) * cartItem.quantity
+                                    (item?.prize || 0) * cartItem.quantity
                                 );
                             }, 0)
                         )}

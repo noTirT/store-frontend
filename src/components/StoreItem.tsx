@@ -1,15 +1,16 @@
 import { Button, Card } from "react-bootstrap";
 import { useShoppingCart } from "../context/ShoppingCartContext";
+import { ArtItem } from "../utilities/apiService";
 import { formatCurrency } from "../utilities/formatCurrency";
 
-type StoreItemProps = {
-    id: number;
-    name: string;
-    price: number;
-    imgUrl: string;
-};
-
-export function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
+export function StoreItem({
+    id,
+    name,
+    prize,
+    imagelink,
+    description,
+    category,
+}: ArtItem) {
     const {
         getItemQuantity,
         increaseCartQuantity,
@@ -21,14 +22,14 @@ export function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
         <Card className="h-100">
             <Card.Img
                 variant="top"
-                src={imgUrl}
+                src={imagelink}
                 height="200px"
                 style={{ objectFit: "cover" }}
             />
             <Card.Body className="d-flex flex-column">
-                <Card.Title className="d-flex justify-content-between alignt-items-baseling mb-4">
+                <Card.Title className="d-flex justify-content-between align-items-baseline mb-4">
                     <span className="fs-2">{name}</span>
-                    <span className="ms-2">{formatCurrency(price)}</span>
+                    <span className="ms-2">{formatCurrency(prize)}</span>
                 </Card.Title>
                 <div className="mt-auto">
                     {quantity === 0 ? (

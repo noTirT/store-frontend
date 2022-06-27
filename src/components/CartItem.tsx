@@ -1,6 +1,7 @@
+import { useEffect, useState } from "react";
 import { Button, Stack } from "react-bootstrap";
 import { useShoppingCart } from "../context/ShoppingCartContext";
-import storeItems from "../data/items.json";
+import { apiService, ArtItem } from "../utilities/apiService";
 import { formatCurrency } from "../utilities/formatCurrency";
 
 type CartItemProps = {
@@ -10,6 +11,15 @@ type CartItemProps = {
 
 export function CartItem({ id, quantity }: CartItemProps) {
     const { removeFromCart } = useShoppingCart();
+    const [storeItems, setStoreItems] = useState<ArtItem[]>([]);
+
+    useEffect(() => {
+        async function getItems() {
+            const response = await apiService.getAllItems();
+            setStoreItems(response);
+        }
+        getItems();
+    }, []);
     const item = storeItems.find((i) => i.id === id);
     if (item == null) return null;
 
@@ -20,7 +30,7 @@ export function CartItem({ id, quantity }: CartItemProps) {
             className="d-flex align-items-center"
         >
             <img
-                src={item.imgUrl}
+                src={item.imagelink}
                 style={{ width: "125px", height: "75px", objectFit: "cover" }}
             />
             <div className="me-auto">
@@ -36,10 +46,10 @@ export function CartItem({ id, quantity }: CartItemProps) {
                     )}
                 </div>
                 <div className="text-muted" style={{ fontSize: ".75rem" }}>
-                    {formatCurrency(item.price)}
+                    {formatCurrency(item.prize)}
                 </div>
             </div>
-            <div>{formatCurrency(item.price * quantity)}</div>
+            <div>{formatCurrency(item.prize * quantity)}</div>
             <Button
                 variant="outline-danger"
                 size="sm"
