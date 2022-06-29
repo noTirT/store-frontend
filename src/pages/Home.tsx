@@ -1,5 +1,7 @@
-import { DataInput } from "../components/DataInput";
-
 export function Home() {
-    return <></>;
+    return (
+        <>
+            <div>Home</div>
+        </>
+    );
 }
