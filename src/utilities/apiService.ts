@@ -4,7 +4,7 @@ export type ArtItem = {
     id: number;
     name: string;
     prize: number;
-    imagelink: string;
+    imagelinks: string[];
     description: string;
     category: string;
 }
@@ -28,7 +28,13 @@ const getAllItems = async () => {
     return response.data;
 }
 
+const getItemById = async (id: number) => {
+    const response = await httpBackend.get(`/art/id/${id}`)
+    return response.data;
+}
+
 
 export const apiService = {
     getAllItems,
+    getItemById,
 }

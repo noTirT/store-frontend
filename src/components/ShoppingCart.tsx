@@ -1,4 +1,4 @@
-import { Offcanvas, Stack } from "react-bootstrap";
+import { Button, Offcanvas, Stack } from "react-bootstrap";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import { formatCurrency } from "../utilities/formatCurrency";
 import { CartItem } from "./CartItem";
@@ -12,6 +12,10 @@ type ShoppingCartProps = {
 export function ShoppingCart({ isOpen }: ShoppingCartProps) {
     const { closeCart, cartItems } = useShoppingCart();
     const [storeItems, setStoreItems] = useState<ArtItem[]>([]);
+
+    function sendOrder() {
+        console.log(`sent order for ${JSON.stringify(cartItems)}`);
+    }
 
     useEffect(() => {
         async function getItems() {
@@ -44,6 +48,9 @@ export function ShoppingCart({ isOpen }: ShoppingCartProps) {
                             }, 0)
                         )}
                     </div>
+                    <Button onClick={() => sendOrder()}>
+                        Bestellung abschicken
+                    </Button>
                 </Stack>
             </Offcanvas.Body>
         </Offcanvas>

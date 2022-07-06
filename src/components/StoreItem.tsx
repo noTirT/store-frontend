@@ -1,4 +1,5 @@
 import { Button, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import { ArtItem } from "../utilities/apiService";
 import { formatCurrency } from "../utilities/formatCurrency";
@@ -7,7 +8,7 @@ export function StoreItem({
     id,
     name,
     prize,
-    imagelink,
+    imagelinks,
     description,
     category,
 }: ArtItem) {
@@ -18,11 +19,12 @@ export function StoreItem({
         removeFromCart,
     } = useShoppingCart();
     const quantity = getItemQuantity(id);
+
     return (
         <Card className="h-100">
             <Card.Img
                 variant="top"
-                src={imagelink}
+                src={imagelinks[0]}
                 height="200px"
                 style={{ objectFit: "cover" }}
             />
@@ -32,6 +34,9 @@ export function StoreItem({
                     <span className="ms-2">{formatCurrency(prize)}</span>
                 </Card.Title>
                 <div className="mt-auto">
+                    <Link to={`/item/${id}`}>
+                        <Button className="mt-2 mb-2 w-100">See Details</Button>
+                    </Link>
                     {quantity === 0 ? (
                         <Button
                             className="w-100"

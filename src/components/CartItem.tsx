@@ -30,7 +30,7 @@ export function CartItem({ id, quantity }: CartItemProps) {
             className="d-flex align-items-center"
         >
             <img
-                src={item.imagelink}
+                src={item.imagelinks[0]}
                 style={{ width: "125px", height: "75px", objectFit: "cover" }}
             />
             <div className="me-auto">
