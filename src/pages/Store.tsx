@@ -5,6 +5,7 @@ import { apiService, ArtItem } from "../utilities/apiService";
 
 export function Store() {
     const [storeItems, setStoreItems] = useState<ArtItem[]>([]);
+    const [render, setRender] = useState<Boolean>(false);
 
     useEffect(() => {
         async function getItems() {
@@ -14,16 +15,22 @@ export function Store() {
         getItems();
     }, []);
 
+    useEffect(() => {
+        setRender(true);
+    }, [storeItems]);
+
     return (
         <>
             <h1>Store</h1>
-            <Row md={2} xs={1} lg={3} className="g-3">
-                {storeItems.map((item) => (
-                    <Col key={item["id"]}>
-                        <StoreItem {...item} />
-                    </Col>
-                ))}
-            </Row>
+            {!render ? null : (
+                <Row md={2} xs={1} lg={3} className="g-3">
+                    {storeItems.map((item) => (
+                        <Col key={item["id"]}>
+                            <StoreItem {...item} />
+                        </Col>
+                    ))}
+                </Row>
+            )}
         </>
     );
 }

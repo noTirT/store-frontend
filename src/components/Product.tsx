@@ -6,15 +6,9 @@ import { apiService, ArtItem } from "../utilities/apiService";
 
 export function Product() {
     let { id } = useParams();
-    const [productData, setProductData] = useState<ArtItem>({
-        id: parseInt(id === undefined ? "-1" : id),
-        name: "",
-        prize: 0,
-        imagelinks: [""],
-        description: "",
-        category: "",
-    });
+    const [productData, setproductData] = useState<ArtItem[]>([]);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+    const [render, setRender] = useState(false);
 
     const {
         getItemQuantity,
@@ -22,7 +16,7 @@ export function Product() {
         decreaseCartQuantity,
         removeFromCart,
     } = useShoppingCart();
-    const quantity = getItemQuantity(productData.id);
+    const quantity = id == undefined ? 0 : getItemQuantity(parseInt(id));
 
     useEffect(() => {
         fetchProducts();
@@ -33,7 +27,8 @@ export function Product() {
             apiService
                 .getItemById(parseInt(id))
                 .then((res) => {
-                    setProductData(res);
+                    setproductData([res]);
+                    setRender(true);
                 })
                 .catch((err) => console.log(err));
         }
@@ -46,6 +41,8 @@ export function Product() {
         setSelectedImageIndex(selectedIndex);
     };
 
+    if (!render) return <></>;
+
     return (
         <>
             <Card>
@@ -56,33 +53,35 @@ export function Product() {
                                 activeIndex={selectedImageIndex}
                                 onSelect={handleSelect}
                             >
-                                {productData.imagelinks.map((link) => (
-                                    <Carousel.Item>
-                                        <img
-                                            className="d-block"
-                                            style={{
-                                                width: "100%",
-                                                height: "800px",
-                                                objectFit: "cover",
-                                            }}
-                                            src={link}
-                                        />
-                                    </Carousel.Item>
-                                ))}
+                                {productData[0].imageLinks.map(
+                                    (link, index) => (
+                                        <Carousel.Item key={index}>
+                                            <img
+                                                className="d-block"
+                                                style={{
+                                                    width: "100%",
+                                                    height: "800px",
+                                                    objectFit: "cover",
+                                                }}
+                                                src={link.link}
+                                            />
+                                        </Carousel.Item>
+                                    )
+                                )}
                             </Carousel>
                         </Col>
                         <Col>
                             <Card.Title>
-                                <h1>{productData.name}</h1>
+                                <h1>{productData[0].name}</h1>
                             </Card.Title>
                             <Card.Text className="h-75">
-                                {productData.description}
+                                {productData[0].description}
                             </Card.Text>
                             {quantity === 0 ? (
                                 <Button
                                     className="w-100"
                                     onClick={() =>
-                                        increaseCartQuantity(productData.id)
+                                        increaseCartQuantity(productData[0].id)
                                     }
                                 >
                                     + Add to Cart
@@ -99,7 +98,7 @@ export function Product() {
                                         <Button
                                             onClick={() =>
                                                 decreaseCartQuantity(
-                                                    productData.id
+                                                    productData[0].id
                                                 )
                                             }
                                         >
@@ -110,7 +109,7 @@ export function Product() {
                                         <Button
                                             onClick={() =>
                                                 increaseCartQuantity(
-                                                    productData.id
+                                                    productData[0].id
                                                 )
                                             }
                                         >
@@ -119,7 +118,7 @@ export function Product() {
                                     </div>
                                     <Button
                                         onClick={() =>
-                                            removeFromCart(productData.id)
+                                            removeFromCart(productData[0].id)
                                         }
                                         variant="danger"
                                         size="sm"

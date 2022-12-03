@@ -3,10 +3,10 @@ import axios from "axios";
 export type ArtItem = {
     id: number;
     name: string;
-    prize: number;
-    imagelinks: string[];
+    price: number;
     description: string;
-    category: string;
+    category: Category[];
+    imageLinks: ImageLink[];
 }
 
 export type ArtItemUpload = {
@@ -17,8 +17,20 @@ export type ArtItemUpload = {
     category: string;
 }
 
+export type ImageLink = {
+    id: number,
+    link: string
+}
+
+
+export type Category = {
+    id: number,
+    categoryName: string,
+}
+
+//https://mighty-spire-02089.herokuapp.com/
 const httpBackend = axios.create({
-    baseURL: "https://mighty-spire-02089.herokuapp.com/",
+    baseURL: "http://localhost:8080",
     responseType: "json",
 });
 
@@ -29,7 +41,7 @@ const getAllItems = async () => {
 }
 
 const getItemById = async (id: number) => {
-    const response = await httpBackend.get(`/art/id/${id}`)
+    const response = await httpBackend.get(`/art/${id}`)
     return response.data;
 }
 
